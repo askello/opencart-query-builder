@@ -15,7 +15,7 @@ QB_DEFAULT_LIMIT = 15; // 0 -> no limit
 You may use the `table` method on the DB class to begin a query. The `table` method returns a fluent query builder instance for the given table, allowing you to chain more constraints onto the query and then finally get the results using the get method:
 
 # Selecting data from DB
-To retrive data from database you may use `get()` method. The `get` method returns an array containing the results where each result is an associative array. You may access each column's value by accessing the column as a key of the array:
+To retrive data from database you may use `get` method. The `get` method returns an array containing the results where each result is an associative array. You may access each column's value by accessing the column as a key of the array:
 
 1. Select all data from a table:
 ```php
@@ -58,7 +58,7 @@ $product = DB::table('product')->where('product_id', 1)->get();
 ```
 
 # Inserting data
-To insert data to database use `add()` method:
+To insert data to database use `add` method:
 ```php
 DB::table('product')->add([
   'model' => 'm1',
@@ -84,13 +84,13 @@ DB::table('product')->add([
 ```
 
 # Updating data
-To update field in database use `set()` method:
+To update field in database use `set` method:
 ```php
 DB::table('product')->set('price', 200);
 
 DB::table('product')->find(1)->set('price', 200);
 ```
-To update multiple fields in database use `set(array)` method:
+Update multiple fields:
 ```php
 DB::table('product')->find(1)->set([
   'model' => 'm2',
