@@ -198,7 +198,7 @@ DB::table('product p')->join('store s', [
   's.language_id' => 1
 ]);
 ```
-But `join` method, there are also `leftJoin` and `rightJoin` methods, which accept same type of input conditions, for example:
+But `join`, there are `leftJoin` and `rightJoin` methods, which accept same type of input conditions. For example:
 ```php
 // ... LEFT OUTER JOIN `oc_store` AS `s` ON `p`.`store_id` = `s`.`store_id`
 DB::table('product p')->leftJoin('store s', 'p.store_id', 's.store_id')
