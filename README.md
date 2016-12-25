@@ -1,13 +1,16 @@
 - [Installation](#installation)
-- [Configuration](#configuration)
 - [Selecting data](#select)
   - [Where conditions](#where)
   - [Limit conditions](#limit)
   - [Ordering results](#order)
+  - [Joins](#join)
   - [First, last, and random conditions](#first-last-random)
 - [Inserting data](#insert)
 - [Updating data](#update)
 - [Deleting data](#delete)
+- [Conditions](#conditions)
+- [DB Logger](#logger)
+
 
 # opencart-query-builder
 Opencart Query Builder is a simple package
@@ -15,17 +18,6 @@ Opencart Query Builder is a simple package
 <a name="installation"></a>
 # Installation
 Upload the contents of the 'upload' folder to the root directory of your OpenCart installation. These are some files should be overwritten. Windows will merge folders of the same name. For Mac you can use this command line command: cp -R -v
-
-<a name="configuration"></a>
-# Configuration
-Query builder configurations are defined in system/library/db/QueryBuilder/config.php file.
-```php
-<?php
-// Default limit for data selecting
-QB_DEFAULT_LIMIT = 15; // 0 -> no limit
-```
-# Getting started
-You may use the `table` method on the DB class to begin a query. The `table` method returns a fluent query builder instance for the given table, allowing you to chain more constraints onto the query and then finally get the results using the get method:
 
 <a name="select"></a>
 ## Selecting data from DB
@@ -164,9 +156,42 @@ $query->sortBy([
 ]);
 ```
 
+<a name="join"></a>
+## Joins
+`join`, `crossJoin`:
+```php
+// ... INNER JOIN `oc_store` AS `p` ...
+DB::table('product')->join('store');
+
+// ... CROSS JOIN `oc_store` AS `p` ...
+DB::table('product')->crossJoin('store');
+```
+Other `join` variants:
+```php
+// ... INNER JOIN `oc_store` USING(`product_id`)
+DB::table('product')->join('store', 'product_id');
+
+// ... INNER JOIN `oc_store` AS `s` ON `p`.`store_id` = `s`.`store_id`
+DB::table('product p')->join('store s', 'p.store_id', 's.store_id')
+
+// ... INNER JOIN `oc_product` AS `p` ON (p.store_id = s.store_id AND `p`.`language_id` = 1)
+DB::table('product p')->join('store s', [
+  'p.store_id = s.store_id',
+  's.language_id' => 1
+]);
+```
+But `join` method, there are also `leftJoin` and `rightJoin` methods, which accept same type of input conditions, for example:
+```php
+// ... LEFT OUTER JOIN `oc_store` AS `s` ON `p`.`store_id` = `s`.`store_id`
+DB::table('product p')->leftJoin('store s', 'p.store_id', 's.store_id')
+
+// ... RIGHT OUTER JOIN `oc_store` AS `s` ON `p`.`store_id` = `s`.`store_id`
+DB::table('product p')->rightJoin('store s', 'p.store_id', 's.store_id')
+```
+
 <a name="first-last-random"></a>
 ## First, last, and random conditions
-Query Builder also provides `first`, `last` and `random` methods for easiest way to work with data in database. These methods accepts one optional parameter - limit of results. By default limit equals 1. r
+Query Builder also provides `first`, `last` and `random` methods for easiest way to work with data in database. These methods have one optional parameter - limit of results. By default limit equals 1.
 ```php
 $query->first();
 
@@ -179,6 +204,9 @@ $query->last(10);
 $query->random();
 
 $query->random(10);
+
+// Example (email of first registered customer)
+$email = DB::table('customer')->first()->get('email');
 ```
 
 <a name="insert"></a>
@@ -250,4 +278,21 @@ DB::table('product')->find(1)->delete();
 If you wish to truncate the entire table, which will remove all rows and reset the auto-incrementing ID to zero, you may use the `clear` method:
 ```php
 DB::table('product')->clear();
+```
+
+<a name="logger"></a>
+# DB Logger
+With query builder there are couple methods to easy debug development process:
+```php
+// Enable logger (by default it is disabled)
+DB::enableLog();
+
+// Available methods
+$queries = DB::getExecutedQueries();
+
+$count = DB::getTotalQueries();
+
+$query = DB::getLastQuery();
+
+DB::printLastQuery();
 ```
