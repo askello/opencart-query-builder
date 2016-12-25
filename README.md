@@ -52,11 +52,61 @@ $sum = DB::table('product')->sum('price');
 
 # Query Conditions
 Condition descriptio...
-1. where(field, value)
+1. where(string field, mixed value)
 ```php
-$product = DB::table('product')->where('product_id', 1)->get();
-```
+// ... WHERE `product_id` = 1 ...
+$query->where('product_id', 1);
 
+// ... WHERE `price` > 200 ...
+$query->where('price >', 200);
+
+// ... WHERE `product_id` IN (1,2,3,...) ...
+$query->where('product_id', [1, 2, 3, ...]);
+
+// ... WHERE `product_id` NOT IN (1,2,3,...) ...
+$query->where('product_id !=', [1, 2, 3, ...]);
+
+// ... WHERE `name` IS NULL ...
+$query->where('name', null);
+
+// ... WHERE `ean` IS NOT NULL ...
+$query->where('ean !=', null);
+```
+If you wish to add multiple conditions, you are free to call `where` method a few times. All conditions will be diveded by `AND` keyword:
+```php
+// ... WHERE `firstname` = 'John' AND `lastname` = 'Dou'
+$query->where('firstname', 'John')->where('lastname', 'Dou');
+```
+If you need to split your conditions by `OR` keyword, you may use `orWhere` method:
+```php
+// ... WHERE `firstname` = 'John' OR `firstname` = 'Leo'
+$query->where('firstname', 'John')->orWhere('firstname', 'Leo');
+```
+2. where(string rawSql)
+```php
+// ... WHERE price BETWEN 100 AND 200 ...
+$query->where('price BETWEN 100 AND 200');
+```
+3. where(array conditions)
+```php
+// ... WHERE `price` = 100 ...
+$query->where(['price' => 100]);
+
+// ... WHERE (`firstname` = 'John' AND `age` > 20)
+$query->where([
+  'firstname' => 'John',
+  'age >'     => 20
+]);
+```
+Use `OR` operator:
+```php
+// ... WHERE (`price` = 100 OR `price` = 200)
+$query->where([
+  'firstname' => 'John',
+  'or',
+  'age >'     => 20
+]);
+```
 # Inserting data
 To insert data to database use `add` method:
 ```php
