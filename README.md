@@ -54,7 +54,7 @@ $avg = DB::table('product')->avg('price');
 $sum = DB::table('product')->sum('price');
 ```
 
-# Query Conditions
+# Where conditions
 Condition descriptio...
 1. where(string field, mixed value)
 ```php
@@ -111,6 +111,57 @@ $query->where([
   'age >'     => 20
 ]);
 ```
+Find result by its primary key:
+```php
+// ... WHERE `primary_key_field` = 1 ...
+$query->find(1);
+
+// ... WHERE `primary_key_field` IN (1,2,3) ...
+$query->find([1,2,3]);
+```
+
+# Limit conditions
+```php
+// ... LIMIT 10 ...
+$query->limit(10);
+
+// ... LIMIT 5, 10 ...
+$query->limit(10)->skip(5);
+
+// ... LIMIT 20, 10 ...
+$query->limit(10)->page(3);
+```
+
+# Ordering results
+```php
+// ... ORDER BY `price` ...
+$query->sortBy('price');
+
+// ... ORDER BY `price` DESC ...
+$query->sortBy('price', 'desc');
+
+// ... ORDER BY `price` ASC, model DESC ...
+$query->sortBy([
+  'price' => 'asc',
+  'model' => 'desc'
+]);
+```
+
+# Other conditions
+```php
+$query->first();
+
+$query->first(10);
+
+$query->last();
+
+$query->last(10);
+
+$query->random();
+
+$query->random(10);
+```
+
 # Inserting data
 To insert data to database use `add` method:
 ```php
