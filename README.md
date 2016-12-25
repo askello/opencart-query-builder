@@ -44,9 +44,13 @@ $names = DB::table('product')->get('name');
 5. Aggregates:
 ```php
 $cnt = DB::table('product')->count();
+
 $min = DB::table('product')->min('price');
+
 $max = DB::table('product')->max('price');
+
 $avg = DB::table('product')->avg('price');
+
 $sum = DB::table('product')->sum('price');
 ```
 
@@ -60,11 +64,11 @@ $query->where('product_id', 1);
 // ... WHERE `price` > 200 ...
 $query->where('price >', 200);
 
-// ... WHERE `product_id` IN (1,2,3,...) ...
-$query->where('product_id', [1, 2, 3, ...]);
+// ... WHERE `product_id` IN (1,2,3) ...
+$query->where('product_id', [1, 2, 3]);
 
-// ... WHERE `product_id` NOT IN (1,2,3,...) ...
-$query->where('product_id !=', [1, 2, 3, ...]);
+// ... WHERE `product_id` NOT IN (1,2,3) ...
+$query->where('product_id !=', [1, 2, 3]);
 
 // ... WHERE `name` IS NULL ...
 $query->where('name', null);
@@ -147,6 +151,20 @@ DB::table('product')->find(1)->set([
   'price' => 200,
   ...
 ]);
+```
+The query builder also provides convenient methods for incrementing or decrementing the value of a given column:
+```php
+DB::table('customer')->increment('followers');
+
+DB::table('customer')->increment('followers', 3);
+
+DB::table('customer')->decrement('followers');
+
+DB::table('customer')->decrement('followers', 3);
+```
+Also there is a `toggle` method for switching  boolean values:
+```php
+DB::table('product')->toggle('status');
 ```
 
 # Deleting data
