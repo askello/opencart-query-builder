@@ -299,7 +299,7 @@ DB::table('product')->clear();
 ```
 
 <a name="logger"></a>
-# DB Logger
+## DB Logger
 With query builder there are couple methods to easy debug development process:
 ```php
 // Enable logger (by default it is disabled)
