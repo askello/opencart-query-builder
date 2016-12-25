@@ -148,15 +148,20 @@ $query->sortBy([
 ```
 
 # Other conditions
+`first` method allows to work with first results:
 ```php
 $query->first();
 
 $query->first(10);
-
+```
+`last` method allows to work with last results:
+```php
 $query->last();
 
 $query->last(10);
-
+```
+random method allows to work with random results:
+```php
 $query->random();
 
 $query->random(10);
