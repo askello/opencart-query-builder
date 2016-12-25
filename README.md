@@ -1,9 +1,22 @@
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Selecting data](#select)
+  - [Where conditions](#where)
+  - [Limit conditions](#limit)
+  - [Ordering results](#order)
+  - [First, last, and random conditions](#first-last-random)
+- [Inserting data](#insert)
+- [Updating data](#update)
+- [Deleting data](#delete)
+
 # opencart-query-builder
 Opencart Query Builder is a simple package
 
+<a name="installation"></a>
 # Installation
 Upload the contents of the 'upload' folder to the root directory of your OpenCart installation. These are some files should be overwritten. Windows will merge folders of the same name. For Mac you can use this command line command: cp -R -v
 
+<a name="configuration"></a>
 # Configuration
 Query builder configurations are defined in system/library/db/QueryBuilder/config.php file.
 ```php
@@ -14,7 +27,8 @@ QB_DEFAULT_LIMIT = 15; // 0 -> no limit
 # Getting started
 You may use the `table` method on the DB class to begin a query. The `table` method returns a fluent query builder instance for the given table, allowing you to chain more constraints onto the query and then finally get the results using the get method:
 
-# Selecting data from DB
+<a name="select"></a>
+## Selecting data from DB
 To retrive data from database you may use `get` method. The `get` method returns an array containing the results where each result is an associative array. You may access each column's value by accessing the column as a key of the array:
 
 1. Select all data from a table:
@@ -54,7 +68,8 @@ $avg = DB::table('product')->avg('price');
 $sum = DB::table('product')->sum('price');
 ```
 
-# Where conditions
+<a name="where"></a>
+## Where conditions
 Condition descriptio...
 1. where(string field, mixed value)
 ```php
@@ -120,7 +135,8 @@ $query->find(1);
 $query->find([1,2,3]);
 ```
 
-# Limit conditions
+<a name="limit"></a>
+## Limit conditions
 ```php
 // ... LIMIT 10 ...
 $query->limit(10);
@@ -132,7 +148,8 @@ $query->limit(10)->skip(5);
 $query->limit(10)->page(3);
 ```
 
-# Ordering results
+<a name="order"></a>
+## Ordering results
 ```php
 // ... ORDER BY `price` ...
 $query->sortBy('price');
@@ -147,27 +164,25 @@ $query->sortBy([
 ]);
 ```
 
-# Other conditions
-`first` method allows to work with first results:
+<a name="first-last-random"></a>
+## First, last, and random conditions
+Query Builder also provides `first`, `last` and `random` methods for easiest way to work with data in database. These methods accepts one optional parameter - limit of results. By default limit equals 1. r
 ```php
 $query->first();
 
 $query->first(10);
-```
-`last` method allows to work with last results:
-```php
+
 $query->last();
 
 $query->last(10);
-```
-random method allows to work with random results:
-```php
+
 $query->random();
 
 $query->random(10);
 ```
 
-# Inserting data
+<a name="insert"></a>
+## Inserting data
 To insert data to database use `add` method:
 ```php
 DB::table('product')->add([
@@ -193,7 +208,8 @@ DB::table('product')->add([
 ]);
 ```
 
-# Updating data
+<a name="update"></a>
+## Updating data
 To update field in database use `set` method:
 ```php
 DB::table('product')->set('price', 200);
@@ -223,7 +239,8 @@ Also there is a `toggle` method for switching  boolean values:
 DB::table('product')->toggle('status');
 ```
 
-# Deleting data
+<a name="delete"></a>
+## Deleting data
 To delete records from database use `delete` method:
 ```php
 DB::table('product')->delete();
