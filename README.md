@@ -1,4 +1,5 @@
 - [Installation](#installation)
+- [General Info](#general)
 - [Selecting data](#select)
   - [Where conditions](#where)
   - [Limit conditions](#limit)
@@ -13,41 +14,55 @@
 
 
 # opencart-query-builder
-Opencart Query Builder is a simple package
+Opencart Query Builder is a simple package developed for simplify work with database. It provide convenient interface to run sql queries and takes care about safety, so there is no need to clean strings being passed to your application.
 
 <a name="installation"></a>
-# Installation
+## Installation
 Upload the contents of the 'upload' folder to the root directory of your OpenCart installation. These are some files should be overwritten. Windows will merge folders of the same name. For Mac you can use this command line command: cp -R -v
+
+<a name="general"></a>
+## General Info
+You may use the table method on the DB class to begin a query. The table method returns a fluent query builder instance for the given table, allowing you to chain more constraints onto the query and then run other commands to working with your data.
+```php
+// Retriving instance of query working with oc_product class.
+$query = DB::table('product');
+```
+Note that there is no need to prefix your table names with DB_PREFIX, query builder will do it automatically. Also you may add alias to your table:
+```php
+// Add alias `p` to `oc_product` table
+$query = DB::table('product p');
+```
 
 <a name="select"></a>
 ## Selecting data from DB
-To retrive data from database you may use `get` method. The `get` method returns an array containing the results where each result is an associative array. You may access each column's value by accessing the column as a key of the array:
+To retrive data from database query builder provide `get` method. The `get` method returns an array containing the results where each result is an associative array. You may access each column's value by accessing the column as a key of the array:
 
 1. Select all data from a table:
 ```php
+// SELECT * FROM `oc_product`
 $products = DB::table('product')->get();
-/*
-$products => array(
-  array('product_id' => 1, 'model' => 'p1', ...),
-  array('product_id' => 2, 'model' => 'p2', ...),
-  ...
-);
 ```
 2. Select only specific fields:
 ```php
+// SELECT `product_id`,`model` FROM `oc_product`
 $products = DB::table('product')->get(['product_id', 'model']);
 ```
-3. Select content of the specific field:
+3. Get fields as aliases:
+```php
+// SELECT `product_id` AS `id` FROM `oc_product`
+$products = DB::table('product')->get(['product_id' => 'id']);
+```
+4. Select content of the specific field:
 ```php
 $name = DB::table('product')->find(1)->get('name');
 // $name => 'John';
 ```
-4. If result of query will contain more than one row, result of get method will array of values:
+5. If result of query will contain more than one row, result of get method will array of values:
 ```php
 $names = DB::table('product')->get('name');
 // $names => array('John', 'Leo', 'Michael', ...);
 ```
-5. Aggregates:
+6. Aggregates:
 ```php
 $cnt = DB::table('product')->count();
 
@@ -62,7 +77,7 @@ $sum = DB::table('product')->sum('price');
 
 <a name="where"></a>
 ## Where conditions
-Condition descriptio...
+You may use the `where` method on a query builder instance to add where clauses to the query. The most basic call to `where` requires two arguments. The first argument is the name of the column. Also after column name may be added condition operator. The second argument is the value to evaluate against the column.
 1. where(string field, mixed value)
 ```php
 // ... WHERE `product_id` = 1 ...
@@ -83,7 +98,7 @@ $query->where('name', null);
 // ... WHERE `ean` IS NOT NULL ...
 $query->where('ean !=', null);
 ```
-If you wish to add multiple conditions, you are free to call `where` method a few times. All conditions will be diveded by `AND` keyword:
+If you wish to add multiple conditions, you are free to call `where` method a few times. All conditions will be divided by `AND` keyword:
 ```php
 // ... WHERE `firstname` = 'John' AND `lastname` = 'Dou'
 $query->where('firstname', 'John')->where('lastname', 'Dou');
@@ -118,7 +133,7 @@ $query->where([
   'age >'     => 20
 ]);
 ```
-Find result by its primary key:
+4. Find result by its primary key:
 ```php
 // ... WHERE `primary_key_field` = 1 ...
 $query->find(1);
@@ -129,10 +144,13 @@ $query->find([1,2,3]);
 
 <a name="limit"></a>
 ## Limit conditions
+To limit the number of results returned from the query, you may use `limit` method.
 ```php
 // ... LIMIT 10 ...
 $query->limit(10);
-
+```
+Also query builder provides `skip` and `page` methods for simle navigation through database records:
+```php
 // ... LIMIT 5, 10 ...
 $query->limit(10)->skip(5);
 
@@ -205,7 +223,7 @@ $query->random();
 
 $query->random(10);
 
-// Example (email of first registered customer)
+// Example (get email of first registered customer)
 $email = DB::table('customer')->first()->get('email');
 ```
 
