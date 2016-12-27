@@ -18,7 +18,7 @@ Opencart Query Builder is a simple package developed for simplify work with data
 
 <a name="installation"></a>
 ## Installation
-Upload the contents of the 'upload' folder to the root directory of your OpenCart installation. These are some files should be overwritten. Windows will merge folders of the same name. For Mac you can use this command line command: cp -R -v
+Upload the contents of the 'upload' folder to the root directory of your OpenCart installation. This is `system/library/db.php` file should be overwritten. Don't worry, you will be able to continue using all OpenCart features, like `$this->db->query()` and no need to rewrite your old code after installation.
 
 <a name="general"></a>
 ## General Info
@@ -37,32 +37,32 @@ $query = DB::table('product p');
 ## Selecting data from DB
 To retrive data from database query builder provide `get` method. The `get` method returns an array containing the results where each result is an associative array. You may access each column's value by accessing the column as a key of the array:
 
-1. Select all data from a table:
+Select all data from a table:
 ```php
 // SELECT * FROM `oc_product`
 $products = DB::table('product')->get();
 ```
-2. Select only specific fields:
+Select only specific fields:
 ```php
 // SELECT `product_id`,`model` FROM `oc_product`
 $products = DB::table('product')->get(['product_id', 'model']);
 ```
-3. Get fields as aliases:
+Get fields as aliases:
 ```php
 // SELECT `product_id` AS `id` FROM `oc_product`
 $products = DB::table('product')->get(['product_id' => 'id']);
 ```
-4. Select content of the specific field:
+Select content of the specific field:
 ```php
 $name = DB::table('product')->find(1)->get('name');
 // $name => 'John';
 ```
-5. If result of query will contain more than one row, result of get method will array of values:
+If result of query will contain more than one row, result of get method will array of values:
 ```php
 $names = DB::table('product')->get('name');
 // $names => array('John', 'Leo', 'Michael', ...);
 ```
-6. Aggregates:
+Aggregates:
 ```php
 $cnt = DB::table('product')->count();
 
@@ -78,7 +78,7 @@ $sum = DB::table('product')->sum('price');
 <a name="where"></a>
 ## Where conditions
 You may use the `where` method on a query builder instance to add where clauses to the query. The most basic call to `where` requires two arguments. The first argument is the name of the column. Also after column name may be added condition operator. The second argument is the value to evaluate against the column.
-1. where(string field, mixed value)
+where(string field, mixed value)
 ```php
 // ... WHERE `product_id` = 1 ...
 $query->where('product_id', 1);
@@ -108,12 +108,12 @@ If you need to split your conditions by `OR` keyword, you may use `orWhere` meth
 // ... WHERE `firstname` = 'John' OR `firstname` = 'Leo'
 $query->where('firstname', 'John')->orWhere('firstname', 'Leo');
 ```
-2. where(string rawSql)
+where(string rawSql)
 ```php
 // ... WHERE price BETWEN 100 AND 200 ...
 $query->where('price BETWEN 100 AND 200');
 ```
-3. where(array conditions)
+where(array conditions)
 ```php
 // ... WHERE `price` = 100 ...
 $query->where(['price' => 100]);
@@ -133,7 +133,7 @@ $query->where([
   'age >'     => 20
 ]);
 ```
-4. Find result by its primary key:
+Find result by its primary key:
 ```php
 // ... WHERE `primary_key_field` = 1 ...
 $query->find(1);
