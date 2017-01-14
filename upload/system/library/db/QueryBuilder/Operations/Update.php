@@ -3,7 +3,7 @@ namespace db\QueryBuilder\Operations;
 
 trait Update {
 	
-	public function update($data) {
+	public function set($data) {
 		$fields = array();
 		
 		foreach($data as $field => $value) {
