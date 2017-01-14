@@ -99,7 +99,7 @@ class Query {
 	}
 
 	private function isRawSql($str) {
-		return preg_match('/[()<>= `\'\+-*\/"]/', $str);
+		return preg_match('/[()<>=`\'\ +*\-\/"]/', $str);
 	}
 	
 	private function isArrayAssoc($arr) {
