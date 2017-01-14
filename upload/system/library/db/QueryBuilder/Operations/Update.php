@@ -4,14 +4,20 @@ namespace db\QueryBuilder\Operations;
 trait Update {
 	
 	public function set($data) {
-		$fields = array();
-		
-		foreach($data as $field => $value) {
-			$fields[] = $this->fieldToValue($field, $value);
+		if(is_array($field)) {
+			$data = $field;
+			
+			$fields = array();
+
+			foreach($data as $field => $value) {
+				$fields[] = $this->fieldToValue($field, $value);
+			}
+			
+			$fields_sql = implode(',', $fields);
+		} else {
+			$fields_sql = $this->fieldToValue($field, $value);
 		}
-		
-		$fields_sql = implode(',', $fields);
-		
+
 		$this->_update($fields_sql);
 	}
 	

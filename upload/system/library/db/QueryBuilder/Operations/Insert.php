@@ -4,7 +4,7 @@ namespace db\QueryBuilder\Operations;
 trait Insert {
 	
 	public function add($data) {
-		if(!is_array_assoc($data)) {
+		if(!$this->isArrayAssoc($data)) {
 			$keys = array();
 			
 			foreach($data as $data1) {
@@ -29,7 +29,7 @@ trait Insert {
 		$sql = "INSERT INTO ".$this->_table()." SET ".$fields;
 		$this->execute($sql);
 		
-		return $this->driver->getLastId();
+		return $this->getLastId();
 	}
 	
 }

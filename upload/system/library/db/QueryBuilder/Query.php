@@ -99,7 +99,12 @@ class Query {
 	}
 
 	private function isRawSql($str) {
-		return preg_match('/[()<>= `\'\"]/', $str);
+		return preg_match('/[()<>= `\'\+-*\/"]/', $str);
+	}
+	
+	private function isArrayAssoc($arr) {
+		if (array() === $arr) return false;
+		return array_keys($arr) !== range(0, count($arr) - 1);
 	}
 
 	public function execute($sql) {
@@ -108,6 +113,10 @@ class Query {
 
 	private function escape($value) {
 		return $this->driver->escape($value);
+	}
+	
+	private function getLastId() {
+		return \DB::getLastId();
 	}
 
 }
