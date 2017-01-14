@@ -3,7 +3,7 @@ namespace db\QueryBuilder\Operations;
 
 trait Insert {
 	
-	public function insert($data) {
+	public function add($data) {
 		if(!is_array_assoc($data)) {
 			$keys = array();
 			
