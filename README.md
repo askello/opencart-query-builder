@@ -62,6 +62,12 @@ If result of query will contain more than one row, result of get method will arr
 $names = DB::table('product')->get('name');
 // $names => array('John', 'Leo', 'Michael', ...);
 ```
+Check if exists record with specific primary key:
+```php
+if( DB::table('product')->has($id) ) {
+  ...
+}
+```
 Aggregates:
 ```php
 $cnt = DB::table('product')->count();
@@ -173,6 +179,12 @@ $query->sortBy([
   'model' => 'desc'
 ]);
 ```
+Also it is possible to use raw expressions:
+```php
+// ... ORDER BY RAND() ...
+$query->sortBy('RAND()');
+```
+But note that example above has more convenient solution by using `random()` method.
 
 <a name="join"></a>
 ## Joins
