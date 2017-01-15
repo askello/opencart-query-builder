@@ -134,7 +134,7 @@ $query->where([
 ```
 Use `OR` operator:
 ```php
-// ... WHERE (`price` = 100 OR `price` = 200)
+// ... WHERE (`firstname` = 'John' OR `age` > 20)
 $query->where([
   'firstname' => 'John',
   'or',
