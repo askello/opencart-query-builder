@@ -26,6 +26,10 @@ trait Select {
 		}
 	}
 	
+	public function has($id) {
+		return (boolean)$this->find($id)->count();
+	}
+	
 	private function getFieldValue($field, $result) {
 		if($this->single()) {
 			if(isset($result->row[$field])) {
