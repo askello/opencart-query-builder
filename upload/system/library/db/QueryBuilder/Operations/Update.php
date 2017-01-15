@@ -21,14 +21,14 @@ trait Update {
 		$this->_update($fields_sql);
 	}
 	
-	public function increment($field) {
-		$fields_sql = $this->_field($field)."=(".$this->field($field)." + 1)";
+	public function increment($field, $count = 1) {
+		$fields_sql = $this->_field($field)."=(".$this->field($field)." + ".(int)$count.")";
 		
 		$this->_update($fields_sql);
 	}
 	
-	public function decrement($field) {
-		$fields_sql = $this->_field($field)."=(".$this->field($field)." - 1)";
+	public function decrement($field, $count = 1) {
+		$fields_sql = $this->_field($field)."=(".$this->field($field)." - ".(int)$count.")";
 		
 		$this->_update($fields_sql);
 	}
