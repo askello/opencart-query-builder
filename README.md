@@ -62,10 +62,12 @@ If result of query will contain more than one row, result of get method will arr
 $names = DB::table('product')->get('name');
 // $names => array('John', 'Leo', 'Michael', ...);
 ```
-Check if exists record with specific primary key:
+Check if exists record with specific primary key by `has` method:
 ```php
 if( DB::table('product')->has($id) ) {
   ...
+} else {
+  exit('There is no product with id ' . $id . '!');
 }
 ```
 Aggregates:
