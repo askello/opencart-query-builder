@@ -42,11 +42,7 @@ trait Conditions {
 			$this->limit(1);
 		}
 
-		if(is_int($keys) or is_string($keys)) {
-			$this->where($this->getPrimaryKey(), $keys);
-		} else {
-			$this->whereIn($this->getPrimaryKey(), $keys);
-		}
+		$this->where($this->getPrimaryKey(), $keys);
 
 		return $this;
 	}
@@ -86,7 +82,7 @@ trait Conditions {
 
 		$operator = $this->determineOperator($field, $value);
 		$field = $this->getConditionField($field);
-		$value = $this->parseConditionValue($value, $operator);
+		$value = $this->parseConditionValue($value);
 
 		return $field." ".$operator." ".$value;
 	}
@@ -171,7 +167,7 @@ trait Conditions {
 			$delimiter = " AND ";
 		}
 
-		if(count($conditions > 1)) {
+		if(count($conditions) > 1) {
 			$sql = "(".$sql.")";
 		}
 

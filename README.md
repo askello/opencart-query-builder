@@ -298,6 +298,10 @@ Also there is a `toggle` method for switching  boolean values:
 ```php
 DB::table('product')->toggle('status');
 ```
+Notice, all methods above (`set`, `increment`, `decrement` and `toggle`) return count of updated rows:
+```php
+$countUpdated = DB::table('product')->where('price <', 100)->set('status', 0);
+```
 
 <a name="delete"></a>
 ## Deleting data
@@ -311,6 +315,10 @@ If you wish to truncate the entire table, which will remove all rows and reset t
 ```php
 DB::table('product')->clear();
 ```
+Notice, `delete` and `clear` methods also return count of deleted rows:
+```php
+$countDeleted = DB::table('product')->where('price <', 100)->delete();
+```
 
 <a name="logger"></a>
 ## DB Logger
@@ -322,9 +330,5 @@ DB::enableLog();
 // Available methods
 $queries = DB::getExecutedQueries();
 
-$count = DB::getTotalQueries();
-
-$query = DB::getLastQuery();
-
-DB::printLastQuery();
+DB::printExecutedQueries();
 ```

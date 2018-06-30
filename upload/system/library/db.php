@@ -51,22 +51,12 @@ class DB {
 		return self::$log;
 	}
 	
-	public static function getTotalQueries() {
-		return count(self::getExecutedQueries());
+	public static function printExecutedQueries() {
+	    foreach(self::$log as $sql) {
+            echo '<pre>'.$sql.'</pre>';
+        }
 	}
-	
-	public static function getLastQuery() {
-		if(!self::getExecutedQueries()) {
-			return 'No queries executed! Write "DB::enableLog();" before query execution.';
-		}
-		
-		return self::$log[count(self::$log) - 1];
-	}
-	
-	public static function printLastQuery() {
-		echo '<pre>';
-		echo self::getLastQuery();
-		echo '</pre>';
-	}
+
+
 	
 }

@@ -116,7 +116,7 @@ class Query {
 	}
 	
 	private function getLastId() {
-		return \DB::getLastId();
+		return $this->driver->getLastId();
 	}
 
 }

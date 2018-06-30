@@ -9,15 +9,16 @@ trait Delete {
 		}
 		
 		$sql = "DELETE FROM ".$this->_table().$this->_where().$this->_order().$this->_limit();
-		$result = $this->execute($sql);
+
+		$this->execute($sql);
 		
-		return $this;
+		return $this->driver->countAffected();
 	}
 	
 	public function clear() {
 		$this->execute("TRUNCATE TABLE ".$this->_table());
 		
-		return $this;
+		return $this->driver->countAffected();
 	}
 	
 }
