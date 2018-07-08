@@ -258,8 +258,7 @@ DB::table('product')->add([
     'model' => 'm1',
     'price' => 100,
     ...
-  ],
-  [
+  ], [
     'model' => 'm2',
     'price' => 620,
     ...
