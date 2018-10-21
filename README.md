@@ -82,7 +82,7 @@ Note that there is no need to prefix your table names with DB_PREFIX, query buil
 
 If your query would work with two or more tables, usually you must use table prefixes for your fields:
 ```php
-// retrive products models and names (where a )
+// retrive products models and names (where few products left)
 $products = $db->table('product')
                ->join('product_description', 'product_id')
                ->where('product.quantity < ', 10)
