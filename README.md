@@ -1,3 +1,4 @@
+- [Compatibility](#compatibility)
 - [Installation](#installation)
 - [General Info](#general)
 - [Selecting data](#select)
@@ -14,23 +15,86 @@
 
 
 # opencart-query-builder
-Opencart Query Builder is a simple package developed for simplify work with database. It provide convenient interface to run sql queries and takes care about safety, so there is no need to clean strings being passed to your application.
+Opencart Query Builder provides convenient interface to work with database. It is totally fast and secure.
+
+Features:
+- super simple interface (inspired by modern frameworks: laravel, yii, codeigniter...)
+- no more tons of `$this->db->escape('...')`, builder automaticaly makes secure sql
+- no more table prefixes, just table names
+- doesn't break your code (`$this->db->query()` and other default functions still work)
+- easy debug functionality
+
+Let see how it looks:
+
+```php
+// somewhere above in controller
+$db = $this->db;
+
+// Take exect what you need:
+$email = $db->table('customer')->find(1)->get('email');
+
+// How to set minimal price for your products? Easy:
+$db->table('product')->where('price <', 100)->set('price', 100);
+
+// Happy customer bought three products at a time? Don't forget to mark it:
+$db->table('product')->find(1)->decrement('quantity', 3);
+```
+
+Like it? More interesting features and code examples you will find bellow.
+
+## Compatibility
+Compatible with OpenCart 2.* and OpenCart 3.*
 
 <a name="installation"></a>
 ## Installation
-Upload the contents of the 'upload' folder to the root directory of your OpenCart installation. This is `system/library/db.php` file should be overwritten. Don't worry, you will be able to continue using all OpenCart features, like `$this->db->query()` and no need to rewrite your old code after installation.
+Upload the contents of the 'upload' folder to the root directory of your OpenCart installation.
+
+To start using QueryBuilder, we need tell our Registry to use it instead of our old DB class. To do it, after:
+```php
+$registry->set('db', ...);
+```
+write this:
+```php
+// QueryBuilder
+$registry->set('db', new db\QueryBuilder\QueryBuilder($registry->get('db')));
+```
+
+OpenCart 2.2.* or higher:
+
+![alt text](https://askello.github.io/opencart-query-builder/installation-new.jpg)
+
+
+OpenCart 2.0.0 - 2.1.0.2:
+
+![alt text](https://askello.github.io/opencart-query-builder/installation-old.jpg)
 
 <a name="general"></a>
 ## General Info
-You may use the table method on the DB class to begin a query. The table method returns a fluent query builder instance for the given table, allowing you to chain more constraints onto the query and then run other commands to working with your data.
+After installation, your old `$this->db` class has new method - `table`. Method `table` returns a fluent query builder instance for the given table, which allows you to chain more constraints onto the query and then run other commands to work with your data.
 ```php
+// somewhere in controller
+$db = $this->db;
+
 // Retriving instance of query working with oc_product class.
-$query = DB::table('product');
+$query = $db->table('product');
 ```
-Note that there is no need to prefix your table names with DB_PREFIX, query builder will do it automatically. Also you may add alias to your table:
+Note that there is no need to prefix your table names with DB_PREFIX, query builder will do it automatically.
+
+If your query would work with two or more tables, usually you must use table prefixes for your fields:
+```php
+// retrive products models and names (where a )
+$products = $db->table('product')
+               ->join('product_description', 'product_id')
+               ->where('product.quantity < ', 10)
+               ->get(['product.model', 'product_description.name']);
+```
+To write less code, you always can add your own aliases for each table:
 ```php
 // Add alias `p` to `oc_product` table
-$query = DB::table('product p');
+$products = $db->table('product p')
+               ->join('product_description pd', 'product_id')
+               ->where('p.quantity', 10);
+               ->get(['p.model', 'pd.name']);
 ```
 
 <a name="select"></a>
@@ -40,31 +104,31 @@ To retrive data from database query builder provide `get` method. The `get` meth
 Select all data from a table:
 ```php
 // SELECT * FROM `oc_product`
-$products = DB::table('product')->get();
+$products = $db->table('product')->get();
 ```
 Select only specific fields:
 ```php
 // SELECT `product_id`,`model` FROM `oc_product`
-$products = DB::table('product')->get(['product_id', 'model']);
+$products = $db->table('product')->get(['product_id', 'model']);
 ```
 Get fields as aliases:
 ```php
 // SELECT `product_id` AS `id` FROM `oc_product`
-$products = DB::table('product')->get(['product_id' => 'id']);
+$products = $db->table('product')->get(['product_id' => 'id']);
 ```
 Select content of the specific field:
 ```php
-$name = DB::table('product')->find(1)->get('name');
+$name = $db->table('product')->find(1)->get('name');
 // $name => 'John';
 ```
 If result of query will contain more than one row, result of get method will array of values:
 ```php
-$names = DB::table('product')->get('name');
+$names = $db->table('product')->get('name');
 // $names => array('John', 'Leo', 'Michael', ...);
 ```
 Check if exists record with specific primary key by `has` method:
 ```php
-if( DB::table('product')->has($id) ) {
+if ( $db->table('product')->has($id) ) {
   ...
 } else {
   exit('There is no product with id ' . $id . '!');
@@ -72,15 +136,15 @@ if( DB::table('product')->has($id) ) {
 ```
 Aggregates:
 ```php
-$cnt = DB::table('product')->count();
+$cnt = $db->table('product')->count();
 
-$min = DB::table('product')->min('price');
+$min = $db->table('product')->min('price');
 
-$max = DB::table('product')->max('price');
+$max = $db->table('product')->max('price');
 
-$avg = DB::table('product')->avg('price');
+$avg = $db->table('product')->avg('price');
 
-$sum = DB::table('product')->sum('price');
+$sum = $db->table('product')->sum('price');
 ```
 
 <a name="where"></a>
@@ -193,21 +257,21 @@ But note that example above has more convenient solution by using `random()` met
 `join`, `crossJoin`:
 ```php
 // ... INNER JOIN `oc_store` AS `p` ...
-DB::table('product')->join('store');
+$db->table('product')->join('store');
 
 // ... CROSS JOIN `oc_store` AS `p` ...
-DB::table('product')->crossJoin('store');
+$db->table('product')->crossJoin('store');
 ```
 Other `join` variants:
 ```php
 // ... INNER JOIN `oc_store` USING(`product_id`)
-DB::table('product')->join('store', 'product_id');
+$db->table('product')->join('store', 'product_id');
 
 // ... INNER JOIN `oc_store` AS `s` ON `p`.`store_id` = `s`.`store_id`
-DB::table('product p')->join('store s', 'p.store_id', 's.store_id')
+$db->table('product p')->join('store s', 'p.store_id', 's.store_id')
 
 // ... INNER JOIN `oc_product` AS `p` ON (p.store_id = s.store_id AND `p`.`language_id` = 1)
-DB::table('product p')->join('store s', [
+$db->table('product p')->join('store s', [
   'p.store_id = s.store_id',
   's.language_id' => 1
 ]);
@@ -215,10 +279,10 @@ DB::table('product p')->join('store s', [
 But `join`, there are `leftJoin` and `rightJoin` methods, which accept same type of input conditions. For example:
 ```php
 // ... LEFT OUTER JOIN `oc_store` AS `s` ON `p`.`store_id` = `s`.`store_id`
-DB::table('product p')->leftJoin('store s', 'p.store_id', 's.store_id')
+$db->table('product p')->leftJoin('store s', 'p.store_id', 's.store_id')
 
 // ... RIGHT OUTER JOIN `oc_store` AS `s` ON `p`.`store_id` = `s`.`store_id`
-DB::table('product p')->rightJoin('store s', 'p.store_id', 's.store_id')
+$db->table('product p')->rightJoin('store s', 'p.store_id', 's.store_id')
 ```
 
 <a name="first-last-random"></a>
@@ -237,15 +301,15 @@ $query->random();
 
 $query->random(10);
 
-// Example (get email of first registered customer)
-$email = DB::table('customer')->first()->get('email');
+// Example (get email of last registered customer)
+$email = $db->table('customer')->last()->get('email');
 ```
 
 <a name="insert"></a>
 ## Inserting data
 To insert data to database use `add` method:
 ```php
-DB::table('product')->add([
+$db->table('product')->add([
   'model' => 'm1',
   'price' => 100,
   ...
@@ -253,7 +317,22 @@ DB::table('product')->add([
 ```
 Insert multiple records:
 ```php
-DB::table('product')->add([
+$ids = $db->table('product')->add([
+  [
+    'model' => 'm1',
+    'price' => 100,
+    ...
+  ], [
+    'model' => 'm2',
+    'price' => 620,
+    ...
+  ],
+  ...
+]);
+```
+Note: that code above executes new `INSERT...` query for every record. If you have lots of data and want to insert all of them by one query, you should use `addManyFast` method:
+```php
+$db->table('product')->addManyFast([
   [
     'model' => 'm1',
     'price' => 100,
@@ -267,17 +346,19 @@ DB::table('product')->add([
 ]);
 ```
 
+Note: `addManyFast` makes insertion of many data quicker, but it doesn't return ids of inserted elements.
+
 <a name="update"></a>
 ## Updating data
 To update field in database use `set` method:
 ```php
-DB::table('product')->set('price', 200);
+$db->table('product')->set('price', 200);
 
-DB::table('product')->find(1)->set('price', 200);
+$db->table('product')->find(1)->set('price', 200);
 ```
 Update multiple fields:
 ```php
-DB::table('product')->find(1)->set([
+$db->table('product')->find(1)->set([
   'model' => 'm2',
   'price' => 200,
   ...
@@ -285,38 +366,38 @@ DB::table('product')->find(1)->set([
 ```
 The query builder also provides convenient methods for incrementing or decrementing the value of a given column:
 ```php
-DB::table('customer')->increment('followers');
+$db->table('customer')->increment('followers');
 
-DB::table('customer')->increment('followers', 3);
+$db->table('customer')->increment('followers', 3);
 
-DB::table('customer')->decrement('followers');
+$db->table('customer')->decrement('followers');
 
-DB::table('customer')->decrement('followers', 3);
+$db->table('customer')->decrement('followers', 3);
 ```
 Also there is a `toggle` method for switching  boolean values:
 ```php
-DB::table('product')->toggle('status');
+$db->table('product')->toggle('status');
 ```
 Notice, all methods above (`set`, `increment`, `decrement` and `toggle`) return count of updated rows:
 ```php
-$countUpdated = DB::table('product')->where('price <', 100)->set('status', 0);
+$countUpdated = $db->table('product')->where('price <', 100)->set('status', 0);
 ```
 
 <a name="delete"></a>
 ## Deleting data
 To delete records from database use `delete` method:
 ```php
-DB::table('product')->delete();
+$db->table('product')->delete();
 
-DB::table('product')->find(1)->delete();
+$db->table('product')->find(1)->delete();
 ```
 If you wish to truncate the entire table, which will remove all rows and reset the auto-incrementing ID to zero, you may use the `clear` method:
 ```php
-DB::table('product')->clear();
+$db->table('product')->clear();
 ```
 Notice, `delete` and `clear` methods also return count of deleted rows:
 ```php
-$countDeleted = DB::table('product')->where('price <', 100)->delete();
+$countDeleted = $db->table('product')->where('price <', 100)->delete();
 ```
 
 <a name="logger"></a>
@@ -324,10 +405,10 @@ $countDeleted = DB::table('product')->where('price <', 100)->delete();
 With query builder there are couple methods to easy debug development process:
 ```php
 // Enable logger (by default it is disabled)
-DB::enableLog();
+$db->enableLog();
 
 // Available methods
-$queries = DB::getExecutedQueries();
+$queries = $db->getExecutedQueries();
 
-DB::printExecutedQueries();
+$db->printExecutedQueries();
 ```

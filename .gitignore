@@ -1,0 +1,11 @@
+# Ignore everything
+*
+upload/system/storage/*
+
+# But not these files...
+!.gitignore
+!upload/system/library/db/QueryBuilder/*
+!upload/system/library/db.php
+
+# ...even if they are in subdirectories
+!*/
