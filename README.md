@@ -45,6 +45,8 @@ Like it? More interesting features and code examples you will find bellow.
 ## Compatibility
 Compatible with OpenCart 2.* and OpenCart 3.*
 
+Tested only with: MySql, MariaDB
+
 <a name="installation"></a>
 ## Installation
 Upload the contents of the 'upload' folder to the root directory of your OpenCart installation.
@@ -95,6 +97,11 @@ $products = $db->table('product p')
                ->join('product_description pd', 'product_id')
                ->where('p.quantity', 10);
                ->get(['p.model', 'pd.name']);
+```
+Also you could use `AS` keyword if you like (case insensitive):
+```php
+$query = $db->table('product as p')->...;
+$query = $db->table('product AS p')->...;
 ```
 
 <a name="select"></a>

@@ -32,15 +32,19 @@ class Query {
     }
 
     public function addTable($table) {
-        $table = DB_PREFIX . $table;
+        $table = trim($table);
+        $table = preg_replace('/ {2,}/', ' ', $table);
 
-        if (strpos($table, ' ') !== false) {
-            $tmp = explode(' ', $table);
+        $tmp = explode(' ', $table);
 
-            $table = $tmp[0];
-            $alias = $tmp[1];
-        } else {
+        $table = DB_PREFIX . $tmp[0];
+
+        if(count($tmp) == 1) {
             $alias = $table;
+        } else if(count($tmp) == 2) {
+            $alias = $tmp[1];
+        } else if(count($tmp) == 3 and strtolower($tmp[1]) == 'as') {
+            $alias = $tmp[2];
         }
 
         $this->tableAliases[$table] = $alias;
