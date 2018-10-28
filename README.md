@@ -30,7 +30,7 @@ Let see how it looks:
 // somewhere above in controller
 $db = $this->db;
 
-// Take exect what you need:
+// Take exact what you need:
 $email = $db->table('customer')->find(1)->get('email');
 
 // How to set minimal price for your products? Easy:
