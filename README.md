@@ -409,9 +409,9 @@ $countDeleted = $db->table('product')->where('price <', 100)->delete();
 
 <a name="logger"></a>
 ## DB Logger
-With query builder there are couple methods to easy debug development process:
+Query builder provides some methods for debugging:
 ```php
-// Enable logger (by default it is disabled)
+// Enable logger (by default it's disabled)
 $db->enableLog();
 
 // Available methods
