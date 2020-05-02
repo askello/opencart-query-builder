@@ -58,7 +58,7 @@ $registry->set('db', ...);
 write this:
 ```php
 // QueryBuilder
-$registry->set('db', new db\QueryBuilder\QueryBuilder($registry->get('db')));
+$registry->set('db', new DB\QueryBuilder\QueryBuilder($registry->get('db')));
 ```
 
 OpenCart 2.2.* or higher:
