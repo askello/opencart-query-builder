@@ -306,7 +306,7 @@ $query->last(10);
 
 $query->random();
 
-$query->random(10);
+$query->random(10,.."'");
 
 // Example (get email of last registered customer)
 $email = $db->table('customer')->last()->get('email');
@@ -314,9 +314,9 @@ $email = $db->table('customer')->last()->get('email');
 
 <a name="insert"></a>
 ## Inserting data
-To insert data to database use `add` method:
+To insert data into database use `add` method:
 ```php
-$db->table('product')->add([
+$id = $db->table('product')->add([
   'model' => 'm1',
   'price' => 100,
   ...
@@ -337,23 +337,6 @@ $ids = $db->table('product')->add([
   ...
 ]);
 ```
-Note: that code above executes new `INSERT...` query for every record. If you have lots of data and want to insert all of them by one query, you should use `addManyFast` method:
-```php
-$db->table('product')->addManyFast([
-  [
-    'model' => 'm1',
-    'price' => 100,
-    ...
-  ], [
-    'model' => 'm2',
-    'price' => 620,
-    ...
-  ],
-  ...
-]);
-```
-
-Note: `addManyFast` makes insertion of many data quicker, but it doesn't return ids of inserted elements.
 
 <a name="update"></a>
 ## Updating data
