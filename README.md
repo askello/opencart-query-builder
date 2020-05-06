@@ -77,7 +77,7 @@ After installation, your old `$this->db` class has new method - `table`. Method 
 // somewhere in controller
 $db = $this->db;
 
-// Retriving instance of query working with oc_product class.
+// Retriving instance of query working with oc_product table.
 $query = $db->table('product');
 ```
 Note that there is no need to prefix your table names with DB_PREFIX, query builder will do it automatically.
@@ -106,7 +106,7 @@ $query = $db->table('product AS p')->...;
 
 <a name="select"></a>
 ## Selecting data from DB
-To retrive data from database query builder provide `get` method. The `get` method returns an array containing the results where each result is an associative array. You may access each column's value by accessing the column as a key of the array:
+Retrieving data from database can be done by `get` method.
 
 Select all data from a table:
 ```php
@@ -125,15 +125,15 @@ $products = $db->table('product')->get(['product_id' => 'id']);
 ```
 Select content of the specific field:
 ```php
-$name = $db->table('product')->find(1)->get('name');
+$name = $db->table('customer')->find(1)->get('firstname');
 // $name => 'John';
 ```
-If result of query will contain more than one row, result of get method will array of values:
+If database returns more than one row, result will be array of values:
 ```php
-$names = $db->table('product')->get('name');
+$names = $db->table('customer')->get('firstname');
 // $names => array('John', 'Leo', 'Michael', ...);
 ```
-Check if exists record with specific primary key by `has` method:
+Check if record with specific primary key exists:
 ```php
 if ( $db->table('product')->has($id) ) {
   ...
