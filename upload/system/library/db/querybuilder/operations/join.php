@@ -56,7 +56,7 @@ trait Join {
         }
 
         if (is_array($key1)) {
-            return " ON " . $this->parseCondition($key1);
+            return " ON " . $this->parseConditions($key1);
         }
 
         return "";

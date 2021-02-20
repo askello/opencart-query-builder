@@ -263,33 +263,33 @@ But note that example above has more convenient solution by using `random()` met
 ## Joins
 `join`, `crossJoin`:
 ```php
-// ... INNER JOIN `oc_store` AS `p` ...
-$db->table('product')->join('store');
+// ... INNER JOIN `oc_product_description` ...
+$db->table('product')->join('product_description');
 
-// ... CROSS JOIN `oc_store` AS `p` ...
-$db->table('product')->crossJoin('store');
+// ... CROSS JOIN `oc_product_description` ...
+$db->table('product')->crossJoin('product_description');
 ```
 Other `join` variants:
 ```php
-// ... INNER JOIN `oc_store` USING(`product_id`)
-$db->table('product')->join('store', 'product_id');
+// ... INNER JOIN `oc_manufacturer` USING(`manufacturer_id`)
+$db->table('product')->join('manufacturer', 'manufacturer_id');
 
-// ... INNER JOIN `oc_store` AS `s` ON `p`.`store_id` = `s`.`store_id`
-$db->table('product p')->join('store s', 'p.store_id', 's.store_id')
+// ... INNER JOIN `oc_manufacturer` AS `m` ON `p`.`manufacturer_id` = `m`.`manufacturer_id`
+$db->table('product p')->join('manufacturer m', 'p.manufacturer_id', 'm.manufacturer_id');
 
-// ... INNER JOIN `oc_product` AS `p` ON (p.store_id = s.store_id AND `p`.`language_id` = 1)
-$db->table('product p')->join('store s', [
-  'p.store_id = s.store_id',
-  's.language_id' => 1
+// ... INNER JOIN `oc_product_description` AS `pd` ON (p.product_id = pd.product_id AND `pd`.`language_id` = 1)
+$db->table('product p')->join('product_description pd', [
+  'p.product_id = pd.product_id',
+  'pd.language_id' => 1
 ]);
 ```
-But `join`, there are `leftJoin` and `rightJoin` methods, which accept same type of input conditions. For example:
+Also there are `leftJoin` and `rightJoin` methods, which accept same type of input conditions. For example:
 ```php
-// ... LEFT OUTER JOIN `oc_store` AS `s` ON `p`.`store_id` = `s`.`store_id`
-$db->table('product p')->leftJoin('store s', 'p.store_id', 's.store_id')
+// ... LEFT OUTER JOIN `oc_manufacturer` AS `m` ON `p`.`manufacturer_id` = `m`.`manufacturer_id`
+$db->table('product p')->leftJoin('manufacturer m', 'p.manufacturer_id', 'm.manufacturer_id');
 
-// ... RIGHT OUTER JOIN `oc_store` AS `s` ON `p`.`store_id` = `s`.`store_id`
-$db->table('product p')->rightJoin('store s', 'p.store_id', 's.store_id')
+// ... RIGHT OUTER JOIN `oc_manufacturer` AS `m` ON `p`.`manufacturer_id` = `m`.`manufacturer_id`
+$db->table('product p')->rightJoin('manufacturer m', 'p.manufacturer_id', 'm.manufacturer_id');
 ```
 
 <a name="first-last-random"></a>
