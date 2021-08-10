@@ -21,7 +21,7 @@ trait Select {
 
         // return rows
         if ($this->single()) {
-            return $rows[0] ?? [];
+            return isset($rows[0]) ? $rows[0] : [];
         } else {
             return $rows;
         }
@@ -33,12 +33,12 @@ trait Select {
 
     private function getFieldValue($field, $rows) {
         if ($this->single()) {
-            return $rows[0][$field] ?? null;
+            return isset($rows[0][$field]) ? $rows[0][$field] : null;
         } else {
             $values = array();
 
             foreach ($rows as $row) {
-                $values[] = $row[$field] ?? null;
+                $values[] = isset($row[$field]) ? $row[$field] : null;
             }
 
             return $values;

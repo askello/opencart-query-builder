@@ -43,7 +43,7 @@ $db->table('product')->find(1)->decrement('quantity', 3);
 Like it? More interesting features and code examples you will find bellow.
 
 ## Compatibility
-Compatible with OpenCart 2.* and OpenCart 3.*
+Compatible with OpenCart 1.*, OpenCart 2.* and OpenCart 3.*
 
 Tested only with: MySql, MariaDB
 
@@ -69,6 +69,10 @@ OpenCart 2.2.* or higher:
 OpenCart 2.0.0 - 2.1.0.2:
 
 ![alt text](https://askello.github.io/opencart-query-builder/installation-old.jpg)
+
+OpenCart 1.* (first versions of OpenCart also need autoloader):
+
+![alt text](https://askello.github.io/opencart-query-builder/installation-v1.jpg)
 
 <a name="general"></a>
 ## General Info
