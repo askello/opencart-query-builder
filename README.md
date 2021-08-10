@@ -43,7 +43,7 @@ $db->table('product')->find(1)->decrement('quantity', 3);
 Like it? More interesting features and code examples you will find bellow.
 
 ## Compatibility
-Compatible with OpenCart 1.*, OpenCart 2.* and OpenCart 3.*
+Compatible with OpenCart 1.&ast;, OpenCart 2.* and OpenCart 3.*
 
 Tested only with: MySql, MariaDB
 
