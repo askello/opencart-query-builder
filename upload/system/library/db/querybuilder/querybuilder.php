@@ -61,4 +61,25 @@ class QueryBuilder {
 		return $this->db->connected();
 	}
 	
+		/**
+	 * Custom Function
+	 */
+	public function in($var) {
+	    if (empty($var)) {
+	        return '';
+	    }
+	    
+	    if (!is_array($var)) {
+	        $var = [$var];
+	    }
+	    $var = array_filter($var);
+	    
+	    //if (!is_numeric($var[0])) {
+	        $var = array_map(function($v) {
+	            return "'". $this->escape($v) . "'";
+	        }, $var);
+	    //}
+	        
+	    return implode(', ', $var);
+	}
 }
